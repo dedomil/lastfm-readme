@@ -1,19 +1,20 @@
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import { html, raw } from 'hono/html';
 import { generateBars, getSongData, paramValidator, queryValidator } from './helpers';
 
 const app = new Hono<{ Bindings: Env }>();
+
+app.use(cors());
 
 app.get('/:username', paramValidator, queryValidator, async (c) => {
 	const { username } = c.req.valid('param');
 	const { dark, spin, rainbow } = c.req.valid('query');
 	const { name, url, artist, image } = await getSongData(username, c.env.LASTFM_APIKEY);
 
-	c.header('content-type', 'image/svg+xml');
-	c.header('cache-control', 'max-age=0, no-cache, no-store, must-revalidate');
-
 	// template from: https://github.com/tthn0/Spotify-Readme
-	return c.render(
+	return c.body(
+		// using html`` as its easy to insert variables
 		html`<svg width="495" height="160" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<foreignObject width="495" height="160">
 				<div xmlns="http://www.w3.org/1999/xhtml" class="container">
@@ -145,7 +146,12 @@ app.get('/:username', paramValidator, queryValidator, async (c) => {
 					</a>
 				</div>
 			</foreignObject>
-		</svg>`.toString()
+		</svg>`.toString(),
+		200,
+		{
+			'cache-control': 'max-age=0, no-cache, no-store, must-revalidate',
+			'content-type': 'image/svg+xml',
+		}
 	);
 });
 
