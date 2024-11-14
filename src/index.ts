@@ -36,14 +36,6 @@ app.get('/:username', paramValidator, queryValidator, async (c) => {
 						  border-radius: 5px;
 							${dark ? 'background: #161B22;' : 'background: #F6F8FA;'}
 						}
-						.scan-code {
-						  transform-origin: top right;
-						  transform: rotate(270deg) translateY(-120px);
-						  width: 120px;
-						  height: 100%;
-						  border-radius: 5px;
-							${dark && `filter: invert(100%);`}
-						}
 						.cover {
 						  width: 120px;
 						  height: 120px;
@@ -77,7 +69,6 @@ app.get('/:username', paramValidator, queryValidator, async (c) => {
 						  display: block;
 						  overflow: hidden;
 						  max-width: 260px;
-						  margin-left: 10px;
 							${dark ? 'color: aliceblue;' : 'color: #161B22;'}
 						}
 						p {
@@ -153,6 +144,12 @@ app.get('/:username', paramValidator, queryValidator, async (c) => {
 			'content-type': 'image/svg+xml',
 		}
 	);
+});
+
+app.get('/open/:username', paramValidator, async (c) => {
+	const { username } = c.req.valid('param');
+	const { url } = await getSongData(username, c.env.LASTFM_APIKEY);
+	return c.redirect(url);
 });
 
 app.notFound((c) => {
