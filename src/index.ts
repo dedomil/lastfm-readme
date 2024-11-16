@@ -9,7 +9,7 @@ app.use(cors());
 
 app.get('/:username', paramValidator, queryValidator, async (c) => {
 	const { username } = c.req.valid('param');
-	const { dark, spin, rainbow } = c.req.valid('query');
+	const { dark, spin, color, rainbow } = c.req.valid('query');
 	const { name, url, artist, image } = await getSongData(username, c.env.LASTFM_APIKEY);
 
 	// template from: https://github.com/tthn0/Spotify-Readme
@@ -131,7 +131,7 @@ app.get('/:username', paramValidator, queryValidator, async (c) => {
 									</div>
 									<p>${artist}</p>
 								</div>
-								<div class="bar-container">${raw(generateBars(rainbow))}</div>
+								<div class="bar-container">${raw(generateBars(rainbow, color))}</div>
 							</section>
 						</main>
 					</a>

@@ -30,6 +30,14 @@ https://lastfm.dedomil.workers.dev
 
 ![Preview](https://lastfm.dedomil.workers.dev/adbtya?dark)
 
+#### Custom Theme
+
+```
+/<username>?color=<hex-color-without-hash>
+```
+
+![Preview](https://lastfm.dedomil.workers.dev/adbtya?color=00ff00)
+
 #### Rainbow Equalizer
 
 ```
